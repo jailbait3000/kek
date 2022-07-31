@@ -3,8 +3,6 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 local window = library.CreateLib("Keybrew Hub Premium discord.gg/keybrew", "GrapeTheme")
 local maintab = window:NewTab("Main")
 
-local New = maintab:NewSection("Execute in Abyss Mode + Mobs Fully spawned in")
-
 local function getClosest()
     local dist, thing = math.huge
     for i, v in next, game:GetService("Workspace").Live.NPCs:GetChildren() do
