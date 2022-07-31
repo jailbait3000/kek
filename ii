@@ -41,6 +41,8 @@ Main:NewToggle("Auto Attack/Skills", "Toggles the Attacks/Skills on and off.", f
                 game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.Two,false,game)
                 game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.Three,false,game)
                 game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.Four,false,game)
+                game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.E,false,game)
+
         end
             end)
         end
