@@ -3,7 +3,7 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 local window = library.CreateLib("Keybrew Hub discord.gg/keybrew", "GrapeTheme")
 local maintab = window:NewTab("Main")
 
-local New = maintab:NewSection("To work Execute in Infinite Mode + Mobs Fully spawned in")
+local New = maintab:NewSection("Execute in Abyss Mode + Mobs Fully spawned in")
 
 local function getClosest()
     local dist, thing = math.huge
@@ -20,51 +20,21 @@ local function getClosest()
     return thing
 end
 
-local TweenService = game:GetService("TweenService")
-local noclipE = false
-local antifall = false
-
-local function noclip()
-    for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-        if v:IsA("BasePart") and v.CanCollide == true then
-            v.CanCollide = false
-            game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-        end
-    end
-end
-
-local function moveto(obj, speed)
-    local info =
-        TweenInfo.new(
-        ((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - obj.Position).Magnitude) / speed,
-        Enum.EasingStyle.Linear
-    )
-    local tween = TweenService:Create(game.Players.LocalPlayer.Character.HumanoidRootPart, info, {CFrame = obj})
-
-    if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-        antifall = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
-        antifall.Velocity = Vector3.new(0, 0, 0)
-        noclipE = game:GetService("RunService").Stepped:Connect(noclip)
-        tween:Play()
-    end
-
-    tween.Completed:Connect(
-        function()
-            antifall:Destroy()
-            noclipE:Disconnect()
-        end
-    )
-end
 
 local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
 local npc = getClosest().HumanoidRootPart
 -- Main
-
+local function getDist(P, M)
+    local dist = (P.Position - M.Position).magnitude
+    return dist
+end
 local Main = maintab:NewSection("Farm")
 Main:NewToggle("Auto Attack/Skills", "Toggles the Attacks/Skills on and off.", function(state)
     o = state
     while o do
         task.wait()
+        pcall(function()
+        if getDist(npc, hrp) < 100 then
                 lp.ClientInputEvents.M1:Fire()
                 lp.ClientInputEvents.Substitute:Fire()
                 game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.One,false,game)
@@ -72,22 +42,19 @@ Main:NewToggle("Auto Attack/Skills", "Toggles the Attacks/Skills on and off.", f
                 game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.Three,false,game)
                 game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.Four,false,game)
         end
+            end)
+        end
     end)
-    local function getDist(P, M)
-        local dist = (P.Position - M.Position).magnitude
-        return dist
-    end
+
 Main:NewToggle("Auto-Farm Infinite", "Toggles the Auto-Farm on and off.", function(state)
     oo = state
     while oo do
         task.wait()
-        if getDist(npc, hrp) < 500 then
-            pcall(function()
-                moveto(getClosest().HumanoidRootPart.CFrame + Vector3.new(0,0,0),500)
-                task.wait(2)
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getClosest()
+        pcall(function()
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getClosest().HumanoidRootPart.CFrame
+                task.wait(.5)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1546, 702, -1741)
             end)    
-        end
         end
     end)
 
@@ -95,7 +62,7 @@ Main:NewToggle("Auto-Farm Infinite", "Toggles the Auto-Farm on and off.", functi
         b = state
         while b do
             task.wait()
-            lp.ClientInputEvents.DoubleJump:Fire()
+            game:GetService("ReplicatedStorage")["_NETWORK"].ContinueAbyss:FireServer()            
             end
         end)
 
