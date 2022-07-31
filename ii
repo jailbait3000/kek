@@ -1,1 +1,86 @@
-game.Player.LocalPlayer:Kick("Come Back Later")
+local lp = game.Players.LocalPlayer
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local window = library.CreateLib("Keybrew Hub Premium discord.gg/keybrew", "GrapeTheme")
+local maintab = window:NewTab("Main")
+
+local New = maintab:NewSection("Execute in Abyss Mode + Mobs Fully spawned in")
+
+local function getClosest()
+    local dist, thing = math.huge
+    for i, v in next, game:GetService("Workspace").Live.NPCs:GetChildren() do
+        if v:IsA("Model") and v.Humanoid.Health > 0 and v:FindFirstChild("DamageMultiplier") then
+            local mag =
+                (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+            if mag < dist then
+                dist = mag
+                thing = v
+            end
+        end
+    end
+    return thing
+end
+
+-- Main
+
+local Main = maintab:NewSection("Farm")
+Main:NewToggle("Auto Attack/Skills", "Toggles the Attacks/Skills on and off.", function(state)
+    o = state
+    while o do
+        task.wait()
+        pcall(function()
+                lp.ClientInputEvents.M1:Fire()
+                lp.ClientInputEvents.Substitute:Fire()
+                game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.One,false,game)
+                game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.Two,false,game)
+                game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.Three,false,game)
+                game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.Four,false,game)
+                game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.E,false,game)
+
+            end)
+        end
+    end)
+
+Main:NewToggle("Auto-Farm Infinite", "Toggles the Auto-Farm on and off.", function(state)
+    oo = state
+    while oo do
+        task.wait()
+        pcall(function()
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getClosest().HumanoidRootPart.CFrame
+            end)    
+        end
+    end)
+
+    Main:NewToggle("Auto Press Continue", "Auto Press Continue", function(state)
+        b = state
+        while b do
+            task.wait()
+            game:GetService("ReplicatedStorage")["_NETWORK"].ContinueAbyss:FireServer()            
+            end
+        end)
+
+    Main:NewToggle("Infinite Jump", "Toggles the Auto-Farm on and off.", function(state)
+        ooo = state
+        while ooo do
+            task.wait()
+            lp.ClientInputEvents.DoubleJump:Fire()
+            end
+        end)
+
+    
+
+-- Settings
+
+local settingstab = window:NewTab("Settings")
+local settingsuisec = settingstab:NewSection("UI Settings")
+settingsuisec:NewKeybind("Toggle UI Keybind", "Toggles the UI with the use of a key.", Enum.KeyCode.RightControl, function()
+	library:ToggleUI()
+end)
+
+--anti afk
+
+local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+   wait(1)
+   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
