@@ -1,166 +1,3 @@
-if game.PlaceId == 7026949294 then
-    
-
-
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local window = library.CreateLib("Keybrew Hub discord.gg/keybrew", "GrapeTheme")
-
--- Main
-
-local maintab = window:NewTab("Main")
-local Main = maintab:NewSection("Farm")
-
-
-local NPCs = {}
-
-for i, v in pairs(game:GetService("Workspace").Mobs:GetDescendants()) do
-    if v:IsA "Model"  then
-        if not table.find(NPCs, tostring(v)) then
-            table.insert(NPCs, tostring(v))
-        end
-    end
-end
-
-local EGGs = {}
-
-for i, v in pairs(game:GetService("Workspace").Eggs.Holders:GetChildren()) do
-    if v:IsA "Model"  then
-        if not table.find(EGGs, tostring(v)) then
-            table.insert(EGGs, tostring(v))
-        end
-    end
-end
-
-
-local k = Main:NewDropdown("Select NPC", "Select an NPC to Auto-Farm.", NPCs, function(o)
-    getgenv().npcs = o
-end)
-Main:NewButton("Refresh NPCs", "Refreshes NPC dropdown.", function()
-    table.clear(NPCs)
-    for i, v in pairs(game:GetService("Workspace").Mobs:GetDescendants()) do
-        if v:IsA "Model"  then
-            if not table.find(NPCs, tostring(v)) then
-                table.insert(NPCs, tostring(v))
-            k:Refresh(NPCs)
-            end
-        end
-    end
-end)
-
-local function getDUNGEON()
-    local dist, thing = math.huge
-    for i, v in next, game:GetService("Workspace").Mobs.Other:GetChildren() do
-        if v:IsA("Model") and v.Humanoid.Health > 0 then
-            local mag =
-                (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if mag < dist then
-                dist = mag
-                thing = v
-            end
-        end
-    end
-    return thing
-end
-
-
-local function getClosest()
-    local dist, thing = math.huge
-    for i, v in next, game:GetService("Workspace").Mobs:GetDescendants() do
-        if v:IsA("Model") and v.Name == npcs and v.Humanoid.Health > 0 then
-            local mag =
-                (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if mag < dist then
-                dist = mag
-                thing = v
-            end
-        end
-    end
-    return thing
-end
-
-Main:NewToggle("Auto-Farm NPC", "Toggles the NPC Auto-Farm on and off.", function(state)
-    oo = state
-    while oo do
-        task.wait()
-        pcall(function()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getClosest().HumanoidRootPart.CFrame
-            local args = {
-                [1] = getClosest(),
-                [2] = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-            }
-
-            game:GetService("ReplicatedStorage").Remotes.Gameplay.FireHit:FireServer(unpack(args))
-        end)
-        end
-    end)
-
-    local Dtab = window:NewTab("Dungeon")
-    local D = Dtab:NewSection("Farm")
-
-    D:NewToggle("Auto Farm Dungeon", "Automatically Farm Dungeon", function(state)
-        d = state
-        while d do
-            task.wait()
-            pcall(function()
-            if not game:GetService("Workspace").ZoneDetections:FindFirstChildWhichIsA("Part") then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(181, 25, -139)
-            elseif game:GetService("Workspace").ZoneDetections:FindFirstChild("DungeonLobby") then
-                    game:GetService("ReplicatedStorage").Events.EnterDungeon:InvokeServer()
-                elseif game:GetService("Workspace").ZoneDetections:FindFirstChildWhichIsA("Part") then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getDUNGEON().HumanoidRootPart.CFrame
-                    game:GetService("ReplicatedStorage").Remotes.Gameplay.FireHit:FireServer(getDUNGEON(),game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
-                end
-                end)
-            end
-        end)
-
-    local eggtab = window:NewTab("Eggs")
-    local egg = eggtab:NewSection("Eggs")
-
-    egg:NewDropdown("Select EGG", "Select an EGG to Auto-Open.", EGGs, function(o)
-        getgenv().eggs = o
-    end)
-
-    egg:NewToggle("Auto Open Eggs", "Automatically open eggs", function(state)
-        o = state
-        while o do
-            task.wait()
-            local args = {
-                [1] = eggs,
-                [2] = "Hatch"
-            }
-
-            game:GetService("ReplicatedStorage").Remotes.Gameplay.RequestPetPurchase:InvokeServer(unpack(args))
-            end
-        end)
-
-        local misctab = window:NewTab("Misc")
-        local miscplayersec = misctab:NewSection("Local Player")
-        miscplayersec:NewSlider("WalkSpeed", "Sets your WalkSpeed.", 500, 1, function(s)
-            getgenv().speed = s
-        end)
-        miscplayersec:NewToggle("Toggle WalkSpeed", "Toggles your WalkSpeed.", function(state)
-            gg = state
-            while gg do
-                task.wait()
-                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speed
-            end
-        end)
-        
-
-
--- Settings
-
-local settingstab = window:NewTab("Settings")
-local settingsuisec = settingstab:NewSection("UI Settings")
-settingsuisec:NewKeybind("Toggle UI Keybind", "Toggles the UI with the use of a key.", Enum.KeyCode.RightControl, function()
-	library:ToggleUI()
-end)
-
-
-elseif game.PlaceId == 6152116144 or 7447158459 or 9366093452 then
-    
-
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local win = lib.CreateLib("Keybrew Hub Premium discord.gg/keybrew", "GrapeTheme")
 
@@ -1030,7 +867,7 @@ webhook:NewToggle("Webhook Drops", "Toggles your Webhook for Drops.", function(s
         task.wait()
         pcall(
                     function()
-                        if game:GetService("Players").TheDarthVath.PlayerGui.Notification["Text_Notification"]:FindFirstChild("New_Item") then
+                        if game.Players.LocalPlayer.PlayerGui.Notification["Text_Notification"]:FindFirstChild("New_Item") then
         local discordId = "377208984043651085"
         local url = weburl
         local data = {
@@ -1087,7 +924,7 @@ webhook:NewToggle("Webhook Level", "Toggles your Webhook for Levels.", function(
         request = http_request or request or HttpPost or syn.request
         local sendWebhook = {Url = url, Body = newdata, Method = "POST", Headers = headers}
         request(sendWebhook)
-        task.wait(5)
+        task.wait(1000)
 end
 end)
 
