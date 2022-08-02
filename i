@@ -938,7 +938,6 @@ settingsuisec:NewKeybind("Toggle UI Keybind", "Toggles the UI with the use of a 
 	library:ToggleUI()
 end)
 end)
-end
 
 
 local vu = game:GetService("VirtualUser")
